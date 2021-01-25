@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>01-vue</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.4.0/d3.min.js"></script>
+    <style>
+      #app svg {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <input type="number" v-model="inputNumber" />
+        <button @click="addBar">Add bar</button>
+      </div>
+      <svg :height="height" :width="width">
+        <rect 
+          v-for="bar in bars"
+          :width="xScale.bandwidth()"
+          :x="xScale(bar.x)"
+          :y="height - yScale(bar.y)"
+          :height="yScale(bar.y)"
+        ></rect>
+      </svg>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>
