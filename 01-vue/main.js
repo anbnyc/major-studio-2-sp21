@@ -15,7 +15,7 @@ const App = {
   },
   methods: {
       addBar() {
-          const value = this.inputNumber;
+          const value = +this.inputNumber;
           this.bars.push({ x: this.bars.length, y: value })
       }
   },

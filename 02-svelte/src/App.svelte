@@ -8,6 +8,7 @@
 	export let width;
 	export let height;
 	let inputNumber;
+	const margin = 10;
 	let bars = [
       { x: 0, y: 3 },
       { x: 1, y: 4 },
@@ -23,12 +24,13 @@
     
     $: xScale = scaleBand()
     	.paddingInner(0.1)
+    	.paddingOuter(0.2)
     	.domain(bars.map(d => d.x))
     	.range([0, width])
     	
     $: yScale = scaleLinear()
     	.domain([0, max(bars, d => d.y)])
-    	.range([0, height])
+    	.range([margin, height - margin])
 </script>
 
 <main>
