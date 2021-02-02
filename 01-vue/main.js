@@ -15,7 +15,7 @@ const App = {
   },
   methods: {
       addBar() {
-          const value = +this.inputNumber;
+          const value = this.inputNumber;
           this.bars.push({ x: this.bars.length, y: value })
       }
   },
@@ -31,6 +31,11 @@ const App = {
             .domain([0, d3.max(this.bars, d => d.y)])
             .range([0, this.height])
             
+      },
+      cScale() {
+          return d3.scaleSequential()
+            .domain([0, d3.max(this.bars, d => d.y)])
+            .interpolator(d3.interpolateViridis);
       }
   }
 }
