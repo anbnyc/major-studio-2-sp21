@@ -17,14 +17,19 @@
         <input type="number" v-model="inputNumber" />
         <button @click="addBar">Add bar</button>
       </div>
-      <svg :height="height" :width="width">
-        <rect 
-          v-for="bar in bars"
-          :width="xScale.bandwidth()"
-          :x="xScale(bar.x)"
-          :y="height - yScale(bar.y)"
-          :height="yScale(bar.y)"
-        ></rect>
+      <svg :height="height" :width="width" v-bind:style="{marginTop: marginTop}">
+       <g v-for="bar in bars"
+          :transform="`translate(${xScale(bar.x)},${height - yScale(bar.y)})`"
+       >
+         <rect 
+            :width="xScale.bandwidth()"
+            :height="yScale(bar.y)"
+            :fill="randoColor"
+          ></rect>
+          <text>
+            {{ bar.val }}
+          </text>
+        </g>
       </svg>
     </div>
     <script src="./main.js"></script>
