@@ -22,6 +22,16 @@
     	]
     }
     
+    function removeBar(index) {
+    	// using the spread operator (...) with the .slice method
+    	// is a fast immutable way to modify an array
+    	// more about immutability: https://dev.to/antonio_pangall/best-practices-to-keep-objects-and-arrays-immutable-in-javascript-3nmm
+    	bars = [
+    		...bars.slice(0, index), // 0 <= b < index
+    		...bars.slice(index + 1) // b >= index +1
+    	]
+    }
+    
     $: xScale = scaleBand()
     	.paddingInner(0.1)
     	.paddingOuter(0.2)
@@ -39,8 +49,9 @@
 		<button on:click={addBar}>Add bar</button>
 	</div>
 	<svg {height} {width}>
-		{#each bars as bar}
+		{#each bars as bar, barIndex}
 			<rect 
+				on:dblclick={() => removeBar(barIndex)}
 				x={xScale(bar.x)} 
 				width={xScale.bandwidth()}
 				y={height - yScale(bar.y)}
