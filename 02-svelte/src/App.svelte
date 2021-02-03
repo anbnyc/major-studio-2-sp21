@@ -1,5 +1,7 @@
 <script>
 	import {
+		select,
+		interpolateTransformSvg,
 		max,
 		scaleBand, 
 		scaleLinear 
@@ -32,6 +34,30 @@
     	]
     }
     
+    // this is a bit of a hack, since we're not transitioning the transform
+    // we're just leveraging the 'in:' directive to call this fn once, on enter,
+    // because the 'animate:' directive is called on update, not enter
+    function svgEnter(node, { transform }){
+    	return {
+    		duration: 500,
+    		tick: t => select(node)
+    			.attr('transform', transform)
+    			.attr('opacity', t) // no interpolation because we want a value in [0, 1]
+    			
+    	}
+    }
+    
+    function svgUpdate(node, { from, to }, { transform }){
+    	const prevTransform = select(node).attr('transform')
+    	const i = interpolateTransformSvg(prevTransform, transform);
+    	return {
+    		duration: 500,
+    		tick: t => {
+    			select(node).attr('transform', i(t))
+    		}
+    	}
+    }
+    
     $: xScale = scaleBand()
     	.paddingInner(0.1)
     	.paddingOuter(0.2)
@@ -41,6 +67,8 @@
     $: yScale = scaleLinear()
     	.domain([0, max(bars, d => d.y)])
     	.range([margin, height - margin])
+    	
+    $: getTransformString = (x, y) => `translate(${xScale(x)}, ${height - yScale(y)})`
 </script>
 
 <main>
@@ -49,8 +77,11 @@
 		<button on:click={addBar}>Add bar</button>
 	</div>
 	<svg {height} {width}>
-		{#each bars as bar, barIndex}
-			<g transform={`translate(${xScale(bar.x)}, ${height - yScale(bar.y)})`}>
+		{#each bars as bar, barIndex (`${bar.x}_${bar.y}`)}
+			<g 
+				in:svgEnter={{ transform: getTransformString(bar.x, bar.y) }}
+				animate:svgUpdate={{ transform: getTransformString(bar.x, bar.y) }}
+			>
 				<rect 
 					on:dblclick={() => removeBar(barIndex)}
 					width={xScale.bandwidth()}
