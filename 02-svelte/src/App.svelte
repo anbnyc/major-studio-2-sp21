@@ -8,7 +8,7 @@
 	export let width;
 	export let height;
 	let inputNumber;
-	const margin = 10;
+	const margin = 15;
 	let bars = [
       { x: 0, y: 3 },
       { x: 1, y: 4 },
@@ -50,13 +50,14 @@
 	</div>
 	<svg {height} {width}>
 		{#each bars as bar, barIndex}
-			<rect 
-				on:dblclick={() => removeBar(barIndex)}
-				x={xScale(bar.x)} 
-				width={xScale.bandwidth()}
-				y={height - yScale(bar.y)}
-				height={yScale(bar.y)}
-			></rect>
+			<g transform={`translate(${xScale(bar.x)}, ${height - yScale(bar.y)})`}>
+				<rect 
+					on:dblclick={() => removeBar(barIndex)}
+					width={xScale.bandwidth()}
+					height={yScale(bar.y)}
+				></rect>
+				<text y={-2} x={xScale.bandwidth()/2}>{bar.y}</text>
+			</g>
 		{/each}
 	</svg>
 </main>
@@ -64,5 +65,8 @@
 <style>
   #app svg {
     padding: 5px;
+  }
+  svg text{
+  	text-anchor: middle;
   }
 </style>
