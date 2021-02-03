@@ -8,6 +8,9 @@
         :y="yScale(point[yVar])"
         :text="`(${point[xVar]}, ${point[yVar]})`"
         :r="5"
+        :onHover="() => setHovered(point.species)"
+        :resetHover="() => setHovered('')"
+        :fill="getFill(point.species)"
       ></LabeledPoint>
     </g>
     <XAxis 
@@ -27,6 +30,8 @@ import LabeledPoint from './components/LabeledPoint.vue';
 import XAxis from './components/XAxis.vue';
 import YAxis from './components/YAxis.vue';
 
+const COLOR_ARRAY = ['#ff8800', '#dd44dd', '#00dd88'];
+
 export default {
   name: 'App',
   created() {
@@ -38,6 +43,7 @@ export default {
           numColumns.forEach(col => point[col] = +d[col]);
           return point;
         });
+        this.species = Array.from(new Set(data.map(d => d.species)));
       });
   },
   components: {
@@ -64,9 +70,23 @@ export default {
       yVar: "petal_width",
       margin: 30,
       width: 300,
-      height: 200
+      height: 200,
+      species: [],
+      hovered: '',
     }
   },
+  methods: {
+    setHovered(nextHovered) {
+      this.hovered = nextHovered;
+    },
+    getFill(species) {
+      if (species === this.hovered) {
+        const index = this.species.indexOf(species);
+        return COLOR_ARRAY[index]
+      }
+      return 'black'
+    }
+  }
 }
 </script>
 
