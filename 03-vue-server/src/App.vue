@@ -1,15 +1,23 @@
 <template>
   <svg :height="height" :width="width">
-    <LabeledPoint
-      :key="point.key"
-      v-for="point in points"
-      :x="xScale(point[xVar])"
-      :y="yScale(point[yVar])"
-      :text="`(${point[xVar]}, ${point[yVar]})`"
-      r="5"
-    ></LabeledPoint>
-    <XAxis />
-    <YAxis />
+    <g class="points">
+      <LabeledPoint
+        :key="point.key"
+        v-for="point in points"
+        :x="xScale(point[xVar])"
+        :y="yScale(point[yVar])"
+        :text="`(${point[xVar]}, ${point[yVar]})`"
+        :r="5"
+      ></LabeledPoint>
+    </g>
+    <XAxis 
+      :xScale="xScale" 
+      :yTranslate="height - margin"
+    />
+    <YAxis 
+      :yScale="yScale"
+      :xTranslate="margin"
+    />
   </svg>
 </template>
 
@@ -46,7 +54,7 @@ export default {
       yScale() {
           return scaleLinear()
             .domain([0, max(this.points, d => d[this.yVar])])
-            .range([this.margin, this.height - this.margin])
+            .range([this.height - this.margin, this.margin])
       }
   },
   data() {
@@ -54,7 +62,7 @@ export default {
       points: [],
       xVar: "sepal_length",
       yVar: "petal_width",
-      margin: 10,
+      margin: 30,
       width: 300,
       height: 200
     }

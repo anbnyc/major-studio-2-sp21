@@ -15,7 +15,7 @@ export default {
     x: Number,
     y: Number,
     r: Number,
-    fill: Number,
+    fill: String,
     text: String
   }
 }
