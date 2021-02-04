@@ -1,4 +1,24 @@
 <template>
+  <div>
+    <select @change="setXVar">
+      <option 
+        v-for="v in variables"
+        :key="v"
+        :label="v"
+        :selected="v === xVar"
+        :value="v"
+      ></option>
+    </select>
+    <select @change="setYVar">
+      <option
+        v-for="v in variables"
+        :key="v"
+        :label="v"
+        :selected="v === yVar"
+        :value="v"
+      ></option>
+    </select>
+  </div>
   <svg :height="height" :width="width">
     <g class="points">
       <LabeledPoint
@@ -44,6 +64,7 @@ export default {
           return point;
         });
         this.species = Array.from(new Set(data.map(d => d.species)));
+        this.variables = numColumns
       });
   },
   components: {
@@ -73,6 +94,7 @@ export default {
       height: 200,
       species: [],
       hovered: '',
+      variables: []
     }
   },
   methods: {
@@ -85,6 +107,12 @@ export default {
         return COLOR_ARRAY[index]
       }
       return 'black'
+    },
+    setXVar(event) {
+      this.xVar = event.target.value
+    },
+    setYVar(event) {
+      this.yVar = event.target.value
     }
   }
 }
