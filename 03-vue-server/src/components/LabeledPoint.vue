@@ -2,6 +2,8 @@
   <g 
     class="labeled-point"
     :transform="`translate(${x}, ${y})`"
+    @mouseenter="onHover"
+    @mouseleave="resetHover"
   >
     <circle :r="r" :fill="fill"></circle>
     <text>{{ text }}</text>
@@ -15,8 +17,10 @@ export default {
     x: Number,
     y: Number,
     r: Number,
-    fill: Number,
-    text: String
+    fill: String,
+    text: String,
+    onHover: Function,
+    resetHover: Function
   }
 }
 </script>
@@ -25,6 +29,7 @@ export default {
 <style scoped>
 .labeled-point text {
   opacity: 0;
+  pointer-events: none;
 }
 .labeled-point:hover text {
   opacity: 1;
