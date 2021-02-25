@@ -60,16 +60,16 @@ export default {
     font-family: Helvetica;
 }
 .modal-text-1 {
-    grid-row: 1 / 2;
-    grid-column: 2 / 4;
+    /*grid-row: TODO / TODO;*/
+    /*grid-column: TODO / TODO;*/
 }
 .modal-text-2 {
-    grid-row: 2 / 4;
-    grid-column: 1 / 3;
+    /*grid-row: TODO / TODO;*/
+    /*grid-column: TODO / TODO;*/
 }
 
 button {
-    grid-row: 3 / 4;
-    grid-column: 3 / 4;
+    /*grid-row: TODO / TODO;*/
+    /*grid-column: TODO / TODO;*/
 }
 </style>

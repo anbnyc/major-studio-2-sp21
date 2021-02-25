@@ -1,5 +1,9 @@
 <template>
-  <h3>Small multiples with CSS Grid</h3>
+  <Header 
+    :setColor="setColor" 
+    :colors="colorArray"
+    :species="species"
+  ></Header>
   <div class="viz">
     <Scatterplot
       v-for="combo in variableCombinations"
@@ -26,10 +30,9 @@
 
 <script>
 import { cross, csv } from 'd3';
+import Header from './components/Header.vue'
 import Scatterplot from './components/Scatterplot.vue'
 import Modal from './components/Modal.vue'
-
-const COLOR_ARRAY = ['#ff8800', '#dd44dd', '#00dd88'];
 
 export default {
   name: 'App',
@@ -51,18 +54,20 @@ export default {
       points: [],
       species: [],
       variables: [],
-      modalData: []
+      modalData: [],
+      colorArray: ['#ff8800', '#dd44dd', '#00dd88']
     }
   },
   components: {
     Scatterplot,
-    Modal
+    Modal,
+    Header
   },
   computed: {
     getFill() {
       return species => {
         const index = this.species.indexOf(species);
-        return index >= 0 ? COLOR_ARRAY[index] : 'black'
+        return index >= 0 ? this.colorArray[index] : 'black'
       }
     },
     variableCombinations() {
@@ -73,6 +78,12 @@ export default {
   methods: {
     setModalData(data) {
       this.modalData = data
+    },
+    setColor(index, value){
+      if (index > this.colorArray.length){
+        return;
+      }
+      this.colorArray[index] = value;
     }
   }
 }
@@ -88,23 +99,23 @@ export default {
   grid-template-columns: repeat(4, 1fr);
 }
 
-@media (max-width:1199px) and (min-width:900px) {
-  .viz {
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
+/*@media (max-width:TODOpx) and (min-width:TODOpx) {*/
+/*  .viz {*/
+/*    grid-template-rows: repeat(6, 1fr);*/
+/*    grid-template-columns: repeat(3, 1fr);*/
+/*  }*/
+/*}*/
 
-@media (max-width:899px) and (min-width:600px) {
-  .viz {
-    grid-template-rows: repeat(8, 1fr);
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/*@media (max-width:TODOpx) and (min-width:TODOpx) {*/
+/*  .viz {*/
+/*    grid-template-rows: repeat(8, 1fr);*/
+/*    grid-template-columns: repeat(2, 1fr);*/
+/*  }*/
+/*}*/
 
-@media (max-width: 599px) {
-  .viz {
-    grid-template-columns: 1fr;
-  }
-}
+/*@media (max-width: TODOpx) {*/
+/*  .viz {*/
+/*    grid-template-columns: 1fr;*/
+/*  }*/
+/*}*/
 </style>

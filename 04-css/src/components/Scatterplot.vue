@@ -3,10 +3,14 @@
     :height="height" 
     :width="width" 
     class="scatterplot"
-    @dblclick="() => onClick(id.split('-'))"
   >
-    <text :y="margin" :x="width/2" class="center-align">
-        {{xVar}} by {{yVar}}
+    <text 
+        :y="margin/2" 
+        :x="width/2" 
+        class="center-align"
+        @click="() => onClick(id.split('-'))"
+    >
+        {{xVar}} vs {{yVar}}
     </text>
     <g class="points">
       <LabeledPoint
@@ -78,6 +82,9 @@ export default {
 </script>
 
 <style scoped>
+text {
+    cursor: pointer;
+}
 .scatterplot {
     justify-self: center;
 }
