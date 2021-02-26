@@ -99,23 +99,23 @@ export default {
   grid-template-columns: repeat(4, 1fr);
 }
 
-/*@media (max-width:TODOpx) and (min-width:TODOpx) {*/
-/*  .viz {*/
-/*    grid-template-rows: repeat(6, 1fr);*/
-/*    grid-template-columns: repeat(3, 1fr);*/
-/*  }*/
-/*}*/
+@media (max-width: 1200px) and (min-width: 901px) {
+  .viz {
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
-/*@media (max-width:TODOpx) and (min-width:TODOpx) {*/
-/*  .viz {*/
-/*    grid-template-rows: repeat(8, 1fr);*/
-/*    grid-template-columns: repeat(2, 1fr);*/
-/*  }*/
-/*}*/
+@media (max-width: 900px) and (min-width: 601px) {
+  .viz {
+    grid-template-rows: repeat(8, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
-/*@media (max-width: TODOpx) {*/
-/*  .viz {*/
-/*    grid-template-columns: 1fr;*/
-/*  }*/
-/*}*/
+@media (max-width: 600px) {
+  .viz {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

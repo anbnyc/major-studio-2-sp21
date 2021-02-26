@@ -29,7 +29,7 @@ export default {
 </script>
 <style scoped>
 .modal {
-    position: absolute;
+    position: fixed;
     top: 25vh;
     left: 25vw;
     right: 25vw;
@@ -60,16 +60,18 @@ export default {
     font-family: Helvetica;
 }
 .modal-text-1 {
-    /*grid-row: TODO / TODO;*/
-    /*grid-column: TODO / TODO;*/
+  grid-row: 1 / 3;
+  grid-column: 2 / 4;
+  overflow: scroll;
 }
 .modal-text-2 {
-    /*grid-row: TODO / TODO;*/
-    /*grid-column: TODO / TODO;*/
+  grid-row: 2 / 4;
+  grid-column: 1 / 2;
+  overflow: scroll;
 }
 
 button {
-    /*grid-row: TODO / TODO;*/
-    /*grid-column: TODO / TODO;*/
+  grid-row: 3 / 4;
+  grid-column: 3 / 4;
 }
 </style>
