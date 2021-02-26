@@ -5,6 +5,7 @@
             <div 
                 v-for="(color, i) in colors" 
                 class="color-picker"
+                :key="color"
             >
                 <label :for="`color-picker-${i}`">{{ species[i] }}</label>
                 <input
