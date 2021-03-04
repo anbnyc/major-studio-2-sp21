@@ -4,30 +4,35 @@
     <div class="legend">
       Legend Here
     </div>
-    <select name="color-var" @change="setColorVar">
-      <option 
+    <el-select v-model="colorVar" @change="setColorVar">
+      <el-option
         v-for="v in colorVars"
         :key="v"
         :label="v"
         :selected="v === colorVar"
         :value="v"
-      ></option>
-    </select>
+      ></el-option>
+    </el-select>
   </div>
+  <el-divider></el-divider>
   <div class="maps">
-    <svg :height="height" :width="width">
-      <g class="paths" @mouseleave="onHover(null)">
-        <path
-          v-for="feature in map.features"
-          :key="feature.properties.geounit"
-          :d="geoPath(feature)"
-          :fill="colorScale(feature.properties[colorVar])"
-          @mouseenter="onHover(feature.properties)"
-        ></path>
-      </g>
-      <text id="hover" :x="50" :y="50"></text>
-    </svg>
-    <div id="mapbox-container"></div>
+    <el-card>
+      <svg :height="height" :width="width">
+        <g class="paths" @mouseleave="onHover(null)">
+          <path
+            v-for="feature in map.features"
+            :key="feature.properties.geounit"
+            :d="geoPath(feature)"
+            :fill="colorScale(feature.properties[colorVar])"
+            @mouseenter="onHover(feature.properties)"
+          ></path>
+        </g>
+        <text id="hover" :x="50" :y="50"></text>
+      </svg>
+    </el-card>
+    <el-card>
+      <div id="mapbox-container"></div>
+    </el-card>
   </div>
 </div>
 </template>
@@ -58,7 +63,7 @@ export default {
       colorVar: 'economy',
       colorVars: ['economy', 'income_grp', 'subregion'],
       width: 400,
-      height: 400,
+      height: 500,
       mb: null
     }
   },
@@ -69,11 +74,11 @@ export default {
     this.mb = new mapboxgl.Map({
       container: "mapbox-container",
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [23, 4],
+      center: [18, 4],
       zoom: 2,
       maxBounds: [
-        [-20, -40],
-        [55, 40],
+        [-18, -40],
+        [53, 40],
       ],
     });
     
@@ -97,8 +102,8 @@ export default {
   computed: {
     projection() {
       return d3.geoEqualEarth()
-        .center([23, 4])
-        .scale(250)
+        .center([18, 4])
+        .scale(320)
         .translate([this.width/2, this.height/2]);
     },
     geoPath() {
@@ -146,8 +151,6 @@ export default {
         .attr('y', projectedCentroid[1])
     },
     setColorVar() {
-      this.colorVar = event.target.value
-      
       this.mb.setPaintProperty('countries', 'fill-color', this.mapboxFillColorSpec)
     }
   }
@@ -165,13 +168,18 @@ export default {
   }
   .header {
     padding: 10px;
+    display: flex;
+  }
+  .legend {
+    margin: 10px;
   }
   .maps {
     display: flex;
+    justify-content: space-around;
   }
   #mapbox-container {
-    height: 400px;
-    width: 600px;
+    height: 500px;
+    width: 400px;
   }
   text {
     transition: fill-opacity 0.5s;

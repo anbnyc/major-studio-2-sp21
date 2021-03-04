@@ -19,3 +19,6 @@
 * implement a brand new component for the Mapbox map
 * try changing the starting center, zoom, and bounds
 * start looking at [tutorials](https://docs.mapbox.com/help/tutorials/?product=Mapbox+GL+JS&language=JavaScript) on the Mapbox site, then dig into the API as you get more comfortable
+
+#### Element+ (component library)
+* explore the [API](https://element-plus.org/#/en-US/component/installation), and implement one more component of your choice
