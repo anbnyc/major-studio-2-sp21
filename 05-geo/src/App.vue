@@ -1,9 +1,6 @@
 <template>
 <div class='App'>
   <div class="header">
-    <div class="legend">
-      Legend Here
-    </div>
     <el-select v-model="colorVar" @change="setColorVar">
       <el-option
         v-for="v in colorVars"
@@ -13,6 +10,9 @@
         :value="v"
       ></el-option>
     </el-select>
+    <div class="legend">
+      LEGEND HERE
+    </div>
   </div>
   <el-divider></el-divider>
   <div class="maps">
@@ -110,7 +110,7 @@ export default {
       return d3.geoPath(this.projection);
     },
     colorDomain() {
-      return Array.from(new Set(map.features.map(d => d.properties[this.colorVar])));
+      return Array.from(new Set(map.features.map(d => d.properties[this.colorVar]))).sort();
     },
     colorScale() {
       return d3.scaleOrdinal(d3.schemeBrBG[this.colorDomain.length])
@@ -172,6 +172,7 @@ export default {
   }
   .legend {
     margin: 10px;
+    display: flex;
   }
   .maps {
     display: flex;
