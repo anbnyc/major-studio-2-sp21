@@ -1,7 +1,7 @@
 <template>
 <div class='App'>
   <div class="header">
-    <el-select v-model="colorVar" @change="setColorVar">
+    <el-select v-model="colorVar">
       <el-option
         v-for="v in colorVars"
         :key="v"
@@ -11,27 +11,39 @@
       ></el-option>
     </el-select>
     <div class="legend">
-      LEGEND HERE
+      <div
+        v-for="color in colorDomain"
+        class="legend-item"
+        :key="color"
+      >
+        <div
+          class="legend-item-color"
+          :style="{ backgroundColor: colorScale(color) }"
+        ></div>
+        <div
+          class="legend-item-text"
+        >{{ color }}</div>
+      </div>
     </div>
   </div>
   <el-divider></el-divider>
   <div class="maps">
     <el-card>
-      <svg :height="height" :width="width">
-        <g class="paths" @mouseleave="onHover(null)">
-          <path
-            v-for="feature in map.features"
-            :key="feature.properties.geounit"
-            :d="geoPath(feature)"
-            :fill="colorScale(feature.properties[colorVar])"
-            @mouseenter="onHover(feature.properties)"
-          ></path>
-        </g>
-        <text id="hover" :x="50" :y="50"></text>
-      </svg>
+      <GeoJSON 
+        :height="height"
+        :width="width"
+        :features="map.features"
+        :colorScale="colorScale"
+        :colorVar="colorVar"
+      />
     </el-card>
     <el-card>
-      <div id="mapbox-container"></div>
+      <MapboxMap 
+        :map="map"
+        :colorScale="colorScale"
+        :colorDomain="colorDomain"
+        :colorVar="colorVar"
+      />
     </el-card>
   </div>
 </div>
@@ -39,14 +51,15 @@
 
 <script>
 import * as d3 from "d3";
-import mapboxgl from "mapbox-gl";
-// import GeoJSON from './components/GeoJSON.vue';
+import GeoJSON from './components/GeoJSON.vue';
+import MapboxMap from './components/MapboxMap.vue';
 import map from './africa.geo.json'
 
 export default {
   name: 'App',
   components: {
-    // GeoJSON
+    GeoJSON,
+    MapboxMap
   },
   data() {
     return {
@@ -64,51 +77,12 @@ export default {
       colorVars: ['economy', 'income_grp', 'subregion'],
       width: 400,
       height: 500,
-      mb: null
     }
   },
   mounted() {
-    // https://dev.to/hmintoh/how-to-mapbox-with-vue-js-2a34
-    mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
-
-    this.mb = new mapboxgl.Map({
-      container: "mapbox-container",
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [18, 4],
-      zoom: 2,
-      maxBounds: [
-        [-18, -40],
-        [53, 40],
-      ],
-    });
     
-    this.mb.on('load', () => {
-      this.mb.addSource("countryPaths", {
-        type: "geojson",
-        data: map
-      });
-      
-      this.mb.addLayer({
-        id: 'countries',
-        type: 'fill',
-        source: 'countryPaths',
-        paint: {
-          "fill-opacity": 0.5,
-          "fill-color": this.mapboxFillColorSpec
-        }
-      })
-    })
   },
   computed: {
-    projection() {
-      return d3.geoEqualEarth()
-        .center([18, 4])
-        .scale(320)
-        .translate([this.width/2, this.height/2]);
-    },
-    geoPath() {
-      return d3.geoPath(this.projection);
-    },
     colorDomain() {
       return Array.from(new Set(map.features.map(d => d.properties[this.colorVar]))).sort();
     },
@@ -116,43 +90,8 @@ export default {
       return d3.scaleOrdinal(d3.schemeBrBG[this.colorDomain.length])
         .domain(this.colorDomain)
     },
-    mapboxFillColorSpec() {
-      return [
-        "to-color", [
-          "at", 
-          [
-            "index-of", 
-            [
-              "get", 
-              this.colorVar
-            ],
-            [
-              "literal",
-              this.colorDomain
-            ]
-          ], 
-          [
-            "literal", 
-            this.colorScale.range()
-          ]
-        ]
-      ]
-    }
   },
   methods: {
-    onHover(nextHover) {
-      if (nextHover === null) {
-        d3.select('#hover').text('')
-        return;
-      }
-      const projectedCentroid = this.projection(nextHover.centroid)
-      d3.select('#hover').text(nextHover.admin)
-        .attr('x', projectedCentroid[0])
-        .attr('y', projectedCentroid[1])
-    },
-    setColorVar() {
-      this.mb.setPaintProperty('countries', 'fill-color', this.mapboxFillColorSpec)
-    }
   }
 }
 </script>
@@ -173,6 +112,20 @@ export default {
   .legend {
     margin: 10px;
     display: flex;
+  }
+  .legend-item {
+    margin-right: 10px;
+  }
+  .legend-item-color {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+  }
+  .legend-item-text {
+    margin: 5px;
+    display: inline-block;
+    vertical-align: bottom;
+    font-size: 12px;
   }
   .maps {
     display: flex;
