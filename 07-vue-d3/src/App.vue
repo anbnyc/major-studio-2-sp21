@@ -1,9 +1,27 @@
 <template>
   <h1>Vue vs D3</h1>
-  <div class="section"><VueOnly /></div>
-  <div class="section"><VueD3Mixed /></div>
-  <div class="section"><MostlyD3 /></div>
-  <Modal :scrollPosition="scrollTop"></Modal>
+  <div class="filters">
+      <el-checkbox-group v-model="filters">
+        <el-checkbox label="1"></el-checkbox>
+        <el-checkbox label="2"></el-checkbox>
+        <el-checkbox label="3"></el-checkbox>
+        <el-checkbox label="4"></el-checkbox>
+        <el-checkbox label="5"></el-checkbox>
+      </el-checkbox-group>
+  </div>
+  <div class="section"><VueOnly 
+    :lotteries="filteredLotteries"
+    :lottery_stats="lottery_stats"
+  /></div>
+  <div class="section"><VueD3Mixed 
+    :lotteries="filteredLotteries"
+    :lottery_stats="lottery_stats"
+  /></div>
+  <div class="section"><MostlyD3 
+    :lotteries="filteredLotteries"
+    :lottery_stats="lottery_stats"
+  /></div>
+  <!--<Modal :scrollPosition="scrollTop"></Modal>-->
 </template>
 
 <script>
@@ -20,7 +38,16 @@ export default {
     return {
       lotteries: null,
       lottery_stats: null,
-      scrollTop: 0
+      scrollTop: 0,
+      filters: ["1","2","3","4","5"]
+    }
+  },
+  computed:{
+    filteredLotteries(){
+      if (!this.lotteries){
+        return null
+      }
+      return this.lotteries.filter(d => this.filters.includes(d.Boro))
     }
   },
   components: {

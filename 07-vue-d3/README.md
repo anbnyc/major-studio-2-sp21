@@ -1,5 +1,7 @@
 # 07-vue-d3
 
+Data source: https://github.com/thecityny/housing-lottery-data
+
 ## Project setup
 ```
 npm install
